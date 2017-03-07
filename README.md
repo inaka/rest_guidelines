@@ -15,30 +15,97 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
 
 ## Conventions & Rules
 
-#### Maintain existing style
-> When editing a system written by someone else, stick to the style in which it was designed. If a project has an overall style, stick to that when adding, removing or updating API endpoints as well.
+#### Use snake_case with JSON
+> When the endpoint returns a JSON, the keys should always be in snake_case, unless you have a super edge case.
+
 
 ##### Examples
 ###### Good
 
-- **POST** `/set_table`
-- **GET** `/get_table/x`
-- **POST** `/set_chair` ⃪ _added by you_
+      {
+      "caption": "string",
+      "comment_count": 0,
+      "created_at": "2017-03-07T18:57:44.622Z",
+      "id": "string",
+      "like_count": 0,
+      "media_type": "image",
+      "owner": "string"
+    }
 
 ###### Bad
 
-- **POST** `/set_table`
-- **GET** `/get_table/x`
-- **POST** `/chairs` ⃪ _added by you_
-
-###### Ugly
-- **POST** `/set_table`
-- **GET** `/tables/x`
-- **POST** `/api/v2.3/set_chair` ⃪ _added by you_
+      {
+      "caption": "string",
+      "commentCount": 0,
+      "createdAt": "2017-03-07T18:57:44.622Z",
+      "id": "string",
+      "likeCount": 0,
+      "mediaType": "image",
+      "owner": "string"
+    }
 
 ##### Reasoning
-It's better to maintain a system that just looks ugly to you than to have a system that looks half ugly to you, half ugly to somebody else.
+Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to named the key fields on a JSON response
+
+
+
+
+#### Don't use response envelopes by default
+> When the endpoint returns, for example, an array, it should be returned as a plain array, not a dictionary with the array as a value.
+
+
+##### Examples
+###### Good
+
+    [
+      {
+      "like_count": 0,
+      "id": "string",
+      "media_type": "comment",
+      "owner": "string"
+      },
+      {
+        "like_count": 0,
+        "id": "string",
+        "media_type": "comment",
+        "owner": "string"
+      },
+      {
+        "like_count": 0,
+        "id": "string",
+        "media_type": "comment",
+        "owner": "string"
+      }
+    ]
+
+###### Bad
+
+    { "items" : [
+        {
+          "like_count": 0,
+          "id": "string",
+          "media_type": "comment",
+          "owner": "string"
+        },
+        {
+          "like_count": 0,
+          "id": "string",
+          "media_type": "comment",
+          "owner": "string"
+        },
+        {
+          "like_count": 0,
+          "id": "string",
+          "media_type": "comment",
+          "owner": "string"
+        }
+      ]
+    }
+
+##### Reasoning
+If the client expects an array it could ( and would ) be confusing to receive a dictionary with one key containing the array as a value. 
 
 ***
+
 
 
