@@ -11,7 +11,7 @@ For **questions** or **general comments** regarding the use of this repository, 
 
 And you can check all of our open-source projects at [inaka.github.io](http://inaka.github.io)
 
----
+
 
 ## Conventions & Rules
 
@@ -47,8 +47,7 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
 ##### Reasoning
 Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to named the key fields on a JSON response
 
-
-
+---
 
 #### Don't use response envelopes by default
 > When the endpoint returns, for example, an array, it should be returned as a plain array, not a dictionary with the array as a value.
@@ -107,5 +106,10 @@ If the client expects an array it could ( and would ) be confusing to receive a 
 
 ***
 
+~~~
 
+~~~
 
+~~~
+
+~~~
