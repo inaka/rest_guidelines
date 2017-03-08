@@ -1,0 +1,5 @@
+{
+  "extensions" : ["md"],
+  "ignore_words" : ["JSON", "&", "snake_case", "camelCase"],
+  "ignore_patterns" : ["[#]*", "http[^ ]+"]
+}

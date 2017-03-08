@@ -104,12 +104,52 @@ Even though in some programming languages is common to name variables or object 
 ##### Reasoning
 If the client expects an array it could ( and would ) be confusing to receive a dictionary with one key containing the array as a value. 
 
+---
+
+#### Use all HTTP verbs ( Not everything is a GET )
+> Use all the HTTP verbs. If you have to Create something use POST. If you want to Eead Something. if you want to Update something use PATCH or PUT. If you want to Delete something use DELETE. Always remember C.R.U.D. ( Create, Read, Update, Delete) when setting the verb for your resource
+
+
+##### Examples
+###### Good
+
+
+Creating a comment on a media item: 
+```
+POST : /media/:media_id/comments 
+```
+Reading comments on a media item:
+```
+GET : /media/:media_id/comments 
+```
+Updating ( editing ) the comment content on a media item:
+```
+PUT : /media/:media_id/comments/:id
+```
+Deleting a comment on a media item:
+```
+DELETE : /media/:media_id/comments/:id
+```
+
+###### Bad
+#FIX THIS
+```
+POST : /media/:media_id/comments 
+```
+Reading comments on a media item:
+```
+GET : /media/:media_id/comments 
+```
+Updating ( editing ) the comment content on a media item:
+```
+PUT : /media/:media_id/comments/:id
+```
+Deleting a comment on a media item:
+```
+DELETE : /media/:media_id/comments/:id
+```
+
+##### Reasoning
+Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. 
+
 ***
-
-~~~
-
-~~~
-
-~~~
-
-~~~
