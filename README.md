@@ -45,7 +45,7 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
     }
 
 ##### Reasoning
-Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to name the key fields on a JSON object
+Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to name the key fields on a JSON object.
 
 ---
 
@@ -102,41 +102,51 @@ Even though in some programming languages is common to name variables or object 
     }
 
 ##### Reasoning
-If you're calling a **GET** on `/entities` , you're asking for entities, not an object with the entities inside one of its properties. Think about it as a christmas gift. If you ask santa for all the power rangers action figures ( and i'm talking about the 90's ones ) and you only see one box under the tree, you can't know if you're getting just one or all of them wrapped in one gift. _Also,  ALL the power rangers? Couldn't you just ask for ONE toy?_
+If you're calling a **GET** on `/entities` , you're asking for entities, not an object with the entities inside one of its properties. So don't envelope things that should be being retrieved directly on the object.
 
 ---
 
-#### Use all HTTP verbs ( Not everything is a GET )
-> Use all the HTTP verbs. If you have to Create something use POST. If you want to Eead Something. if you want to Update something use PATCH or PUT. If you want to Delete something use DELETE. Always remember C.R.U.D. ( Create, Read, Update, Delete) when setting the verb for your resource
+#### Use all HTTP verbs (Not everything is a GET)
+> Use all the HTTP verbs. If you have to Create something use POST. If you want to Read something use GET. If you want to Update something use PATCH or PUT. If you want to Delete something use DELETE. Always remember C.R.U.D. (Create, Read, Update, Delete) when setting the verb for your resource.
 
 
 ##### Examples
 ###### Good
 
-Creating a comment on a media item: 
+>Creating a comment on a media item: 
+
 - **POST** `/media/:media_id/comments`
-  Reading comments on a media item:
+   This Creates a comment related to the media id you pass along the URL.
+> Reading comments on a media item:
+
 - **GET** `/media/:media_id/comments`
-  Updating ( editing ) the comment content on a media item:
+   This Reads all the comments related to the media id you pass along the URL.
+> Updating ( editing ) the comment content on a media item:
+
 - **PUT**  `/media/:media_id/comments/:id`
-  Deleting a comment on a media item:
+   This Updates all the fields of the comment with the id you pass along the URL
+> Deleting a comment on a media item:
+
 - **DELETE** `/media/:media_id/comments/:id`
+   This Deletes the comment with the id you pass along the URL
 
 ###### Bad
-Creating a comment on a media item: 
+> Creating a comment on a media item: 
+
 - **GET** `/media/:media_id/create_comment?text=comment%20text`
-  Updating ( editing ) the comment content on a media item:
+
+> Updating the comment content on a media item:
+
 - **GET**  `/media/:media_id/update_comment?text=comment%20new%20text`
-  Deleting a comment on a media item:
+> Deleting a comment on a media item:
+
 - **GET** `/media/:media_id/delete_comment?id=comment1`
 
 
 ##### Reasoning
-Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. Using always GET is like using your spoon to eat your soup and cut your steak. Just don't.
+Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. 
 
 ---
-
-## Conventions & Rules
 
 #### Maintain existing style
 > When editing a system written by someone else, stick to the style in which it was designed. If a project has an overall style, stick to that when adding, removing or updating API endpoints as well.
