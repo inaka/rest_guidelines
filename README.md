@@ -58,11 +58,11 @@ It's better to maintain a system that just looks ugly to you than to have a syst
 {
 	"caption": "string",
 	"comment_count": 0,
-    "created_at": "2017-03-07T18:57:44.622Z",
-    "id": "string",
-    "like_count": 0,
-    "media_type": "image",
-    "owner": "string"
+	"created_at": "2017-03-07T18:57:44.622Z",
+	"id": "string",
+	"like_count": 0,
+	"media_type": "image",
+	"owner": "string"
 }
 ```
 
