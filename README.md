@@ -102,7 +102,7 @@ Even though in some programming languages is common to name variables or object 
     }
 
 ##### Reasoning
-If you're calling a **GET** on `/entities` , you're asking for entities, not an object with the entities inside one of its properties. So don't envelope things that are excpected to be retrieved directly on the object and not one level deeper.
+If you're calling a **GET** on `/entities` , you're asking for a list of entities, not an object with the entities inside one of its properties. So don't envelope things that should be retrieved directly.
 
 ---
 
