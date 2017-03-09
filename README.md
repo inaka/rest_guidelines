@@ -16,7 +16,7 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
 ## Conventions & Rules
 
 #### Use snake_case with JSON
-> When the endpoint returns a JSON, the keys should always be in snake_case, unless you have a super edge case.
+> When the endpoint returns a JSON, the keys should always be in snake_case.
 
 
 ##### Examples
@@ -45,7 +45,7 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
     }
 
 ##### Reasoning
-Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to named the key fields on a JSON response
+Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to name the key fields on a JSON object
 
 ---
 
@@ -102,7 +102,7 @@ Even though in some programming languages is common to name variables or object 
     }
 
 ##### Reasoning
-If the client expects an array it could ( and would ) be confusing to receive a dictionary with one key containing the array as a value. 
+If you're calling a **GET** on `/entities` , you're asking for entities, not an object with the entities inside one of its properties. Think about it as a christmas gift. If you ask santa for all the power rangers action figures ( and i'm talking about the 90's ones ) and you only see one box under the tree, you can't know if you're getting just one or all of them wrapped in one gift. _Also,  ALL the power rangers? Couldn't you just ask for ONE toy?_
 
 ---
 
@@ -113,43 +113,53 @@ If the client expects an array it could ( and would ) be confusing to receive a 
 ##### Examples
 ###### Good
 
-
 Creating a comment on a media item: 
-```
-POST : /media/:media_id/comments 
-```
-Reading comments on a media item:
-```
-GET : /media/:media_id/comments 
-```
-Updating ( editing ) the comment content on a media item:
-```
-PUT : /media/:media_id/comments/:id
-```
-Deleting a comment on a media item:
-```
-DELETE : /media/:media_id/comments/:id
-```
+- **POST** `/media/:media_id/comments`
+  Reading comments on a media item:
+- **GET** `/media/:media_id/comments`
+  Updating ( editing ) the comment content on a media item:
+- **PUT**  `/media/:media_id/comments/:id`
+  Deleting a comment on a media item:
+- **DELETE** `/media/:media_id/comments/:id`
 
 ###### Bad
-#FIX THIS
-```
-POST : /media/:media_id/comments 
-```
-Reading comments on a media item:
-```
-GET : /media/:media_id/comments 
-```
-Updating ( editing ) the comment content on a media item:
-```
-PUT : /media/:media_id/comments/:id
-```
-Deleting a comment on a media item:
-```
-DELETE : /media/:media_id/comments/:id
-```
+Creating a comment on a media item: 
+- **GET** `/media/:media_id/create_comment?text=comment%20text`
+  Updating ( editing ) the comment content on a media item:
+- **GET**  `/media/:media_id/update_comment?text=comment%20new%20text`
+  Deleting a comment on a media item:
+- **GET** `/media/:media_id/delete_comment?id=comment1`
+
 
 ##### Reasoning
-Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. 
+Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. Using always GET is like using your spoon to eat your soup and cut your steak. Just don't.
+
+---
+
+## Conventions & Rules
+
+#### Maintain existing style
+> When editing a system written by someone else, stick to the style in which it was designed. If a project has an overall style, stick to that when adding, removing or updating API endpoints as well.
+
+##### Examples
+###### Good
+
+- **POST** `/set_table`
+- **GET** `/get_table/x`
+- **POST** `/set_chair` ⃪ _added by you_
+
+###### Bad
+
+- **POST** `/set_table`
+- **GET** `/get_table/x`
+- **POST** `/chairs` ⃪ _added by you_
+
+###### Ugly
+- **POST** `/set_table`
+- **GET** `/tables/x`
+- **POST** `/api/v2.3/set_chair` ⃪ _added by you_
+
+##### Reasoning
+It's better to maintain a system that just looks ugly to you than to have a system that looks half ugly to you, half ugly to somebody else.
 
 ***
