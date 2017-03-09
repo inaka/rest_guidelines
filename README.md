@@ -15,34 +15,70 @@ And you can check all of our open-source projects at [inaka.github.io](http://in
 
 ## Conventions & Rules
 
+#### Maintain existing style
+
+> When editing a system written by someone else, stick to the style in which it was designed. If a project has an overall style, stick to that when adding, removing or updating API endpoints as well.
+
+##### Examples
+
+###### Good
+
+- **POST** `/set_table`
+- **GET** `/get_table/x`
+- **POST** `/set_chair` ⃪ _added by you_
+
+###### Bad
+
+- **POST** `/set_table`
+- **GET** `/get_table/x`
+- **POST** `/chairs` ⃪ _added by you_
+
+###### Ugly
+
+- **POST** `/set_table`
+- **GET** `/tables/x`
+- **POST** `/api/v2.3/set_chair` ⃪ _added by you_
+
+##### Reasoning
+
+It's better to maintain a system that just looks ugly to you than to have a system that looks half ugly to you, half ugly to somebody else.
+
+------
+
+#### 
+
 #### Use snake_case with JSON
-> When the endpoint returns a JSON, the keys should always be in snake_case.
+
+> When the endpoint returns or receive a JSON, the keys should always be in snake_case.
 
 
 ##### Examples
 ###### Good
-
-      {
-      "caption": "string",
-      "comment_count": 0,
-      "created_at": "2017-03-07T18:57:44.622Z",
-      "id": "string",
-      "like_count": 0,
-      "media_type": "image",
-      "owner": "string"
-    }
+```
+{
+	"caption": "string",
+	"comment_count": 0,
+    "created_at": "2017-03-07T18:57:44.622Z",
+    "id": "string",
+    "like_count": 0,
+    "media_type": "image",
+    "owner": "string"
+}
+```
 
 ###### Bad
 
-      {
-      "caption": "string",
-      "commentCount": 0,
-      "createdAt": "2017-03-07T18:57:44.622Z",
-      "id": "string",
-      "likeCount": 0,
-      "mediaType": "image",
-      "owner": "string"
-    }
+```
+{
+	"caption": "string",
+	"commentCount": 0,
+	"createdAt": "2017-03-07T18:57:44.622Z",
+	"id": "string",
+	"likeCount": 0,
+	"mediaType": "image",
+	"owner": "string"  
+}
+```
 
 ##### Reasoning
 Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to name the key fields on a JSON object.
@@ -56,50 +92,53 @@ Even though in some programming languages is common to name variables or object 
 ##### Examples
 ###### Good
 
-    [
-      {
-      "like_count": 0,
-      "id": "string",
-      "media_type": "comment",
-      "owner": "string"
-      },
-      {
-        "like_count": 0,
-        "id": "string",
-        "media_type": "comment",
-        "owner": "string"
-      },
-      {
-        "like_count": 0,
-        "id": "string",
-        "media_type": "comment",
-        "owner": "string"
-      }
-    ]
-
+```
+[
+	{
+		"like_count": 0,
+		"id": "string",
+		"media_type": "comment",
+		"owner": "string"
+	},
+	{
+		"like_count": 0,
+		"id": "string",
+		"media_type": "comment",
+		"owner": "string"
+	},
+	{
+		"like_count": 0,
+		"id": "string",
+		"media_type": "comment",
+		"owner": "string"
+	}
+]
+```
 ###### Bad
-
-    { "items" : [
-        {
-          "like_count": 0,
-          "id": "string",
-          "media_type": "comment",
-          "owner": "string"
-        },
-        {
-          "like_count": 0,
-          "id": "string",
-          "media_type": "comment",
-          "owner": "string"
-        },
-        {
-          "like_count": 0,
-          "id": "string",
-          "media_type": "comment",
-          "owner": "string"
-        }
-      ]
-    }
+```
+{ "items" :
+	[
+		{
+			"like_count": 0,
+			"id": "string",
+			"media_type": "comment",
+			"owner": "string"
+		},
+		{
+			"like_count": 0,
+			"id": "string",
+			"media_type": "comment",
+			"owner": "string"
+		},
+		{
+			"like_count": 0,
+			"id": "string",
+			"media_type": "comment",
+			"owner": "string"
+		}
+	]
+}
+```
 
 ##### Reasoning
 If you're calling a **GET** on `/entities` , you're asking for a list of entities, not an object with the entities inside one of its properties. So don't envelope things that should be retrieved directly.
@@ -145,31 +184,5 @@ If you're calling a **GET** on `/entities` , you're asking for a list of entitie
 
 ##### Reasoning
 Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. 
-
----
-
-#### Maintain existing style
-> When editing a system written by someone else, stick to the style in which it was designed. If a project has an overall style, stick to that when adding, removing or updating API endpoints as well.
-
-##### Examples
-###### Good
-
-- **POST** `/set_table`
-- **GET** `/get_table/x`
-- **POST** `/set_chair` ⃪ _added by you_
-
-###### Bad
-
-- **POST** `/set_table`
-- **GET** `/get_table/x`
-- **POST** `/chairs` ⃪ _added by you_
-
-###### Ugly
-- **POST** `/set_table`
-- **GET** `/tables/x`
-- **POST** `/api/v2.3/set_chair` ⃪ _added by you_
-
-##### Reasoning
-It's better to maintain a system that just looks ugly to you than to have a system that looks half ugly to you, half ugly to somebody else.
 
 ***
