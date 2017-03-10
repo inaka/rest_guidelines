@@ -185,4 +185,90 @@ If you're calling a **GET** on `/entities` , you're asking for a list of entitie
 ##### Reasoning
 Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. 
 
+---
+
+#### Use Nouns for endpoints names ( URLs )
+
+> Your resources should be always nouns and no verbs.
+
+##### Examples
+
+###### Good
+
+> Getting an entity
+
+- **GET** `/entities/:id`
+  This retrieve the entity with the Id you pass along the URL.
+
+> Creating an entity:
+
+- **POST** `/entities`
+  This creates an entity with the info you pass along the request body ( We'll get to this later ).
+
+> Deleting an entity
+
+- **DELETE** `/entities/:id`
+  This Deletes the entity with the id you pass along the URL
+
+###### Bad
+
+> Getting an entity
+
+- **GET** `/get/entity?id=:id`
+
+> Creating an entity
+
+- **POST** `/create/entity`
+
+> Deleting an entity
+
+- **DELETE** `/delete_entity/:id`
+
+##### Reasoning
+
+Your resources should reflect what they do based on the HTTP Verb plus the resource name ( Noun ). So it make sense that doing a **GET** to `/entities` retrieves a list of entities. In exchange, doing a **GET** to `/get/entity` looks redundant and is not self descriptive.
+
+---
+
+#### Plural nouns or singular nouns?
+
+> If your resource contains a list or a group of entities insted of just one then it should be named with a plural noun. If it always contains on single entity then it should be named with a singular noun.
+
+##### Examples
+
+###### Good
+
+> Getting comments from an entity
+
+- **GET** `/entities/:id/comments`
+  This retrieve a list of comments for the entity with the Id you pass along the URL.
+
+> Getting the likes count of an entity
+
+- **GET** `/entities/:id/like_count`
+  This gets the likes count of  an entity with the Id you pass along the URL.
+
+> Deleting all the comments from an entity
+
+- **DELETE** `/entities/:id/comments`
+  This Deletes all the comments fomr the entity with the id you pass along the URL
+
+###### Bad
+
+> Getting an entity
+
+- **GET** `/entity/:id`
+
+> Creating an entity:
+
+- **POST** `/entities`
+
+> Deleting a comment from an entity
+
+- **DELETE** `/entities/:id/comment/:id`
+
+##### Reasoning
+
+Your resource should be clear about the fact that it is a single object or a group/list of objects
+
 ***
