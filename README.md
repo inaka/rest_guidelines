@@ -146,7 +146,7 @@ If you're calling a **GET** on `/entities` , you're asking for a list of entitie
 ---
 
 #### Use all HTTP verbs (Not everything is a GET)
-> Use all the HTTP verbs. If you have to Create something use POST. If you want to Read something use GET. If you want to Update something use PATCH or PUT. If you want to Delete something use DELETE. Always remember C.R.U.D. (Create, Read, Update, Delete) when setting the verb for your resource.
+> Use all the HTTP verbs. If you have to Create something use POST. If you want to Read something use GET. If you want to Update something use PATCH or PUT. If you want to Delete something use DELETE. Always remember C.R.U.D. (Create, Read, Update, Delete) when setting the verb for your endpoint.
 
 
 ##### Examples
@@ -155,19 +155,19 @@ If you're calling a **GET** on `/entities` , you're asking for a list of entitie
 >Creating a comment on a media item: 
 
 - **POST** `/media/:media_id/comments`
-   This Creates a comment related to the media id you pass along the URL.
+   This Creates a comment related to the media id you pass along in the URL.
 > Reading comments on a media item:
 
 - **GET** `/media/:media_id/comments`
-   This Reads all the comments related to the media id you pass along the URL.
+   This Reads all the comments related to the media id you pass along in the URL.
 > Updating ( editing ) the comment content on a media item:
 
 - **PUT**  `/media/:media_id/comments/:id`
-   This Updates all the fields of the comment with the id you pass along the URL
+   This Updates all the fields of the comment with the id you pass along in the URL
 > Deleting a comment on a media item:
 
 - **DELETE** `/media/:media_id/comments/:id`
-   This Deletes the comment with the id you pass along the URL
+   This Deletes the comment with the id you pass along in the URL
 
 ###### Bad
 > Creating a comment on a media item: 
@@ -179,96 +179,100 @@ If you're calling a **GET** on `/entities` , you're asking for a list of entitie
 - **GET**  `/media/:media_id/update_comment?text=comment%20new%20text`
 > Deleting a comment on a media item:
 
-- **GET** `/media/:media_id/delete_comment?id=comment1`
+- **GET** `/media/:media_id/delete_comment?id=:id`
 
 
 ##### Reasoning
-Using the right HTTP Verb on each resource will make clearer what the resource is made for and what we should expect it to do, receive and return. 
+Using the right HTTP Verb on each endpoint will make clearer what the endpoint is made for and what we should expect it to do, receive and return. 
 
 ---
 
-#### Use Nouns for endpoints names ( URLs )
-
-> Your resources should be always nouns and no verbs.
+#### Use Nouns for endpoints names (URLs)
+> Your endpoints names should be always nouns, not verbs.
 
 ##### Examples
 
 ###### Good
 
-> Getting an entity
+> Getting a user
 
-- **GET** `/entities/:id`
-  This retrieve the entity with the Id you pass along the URL.
+- **GET** `/users/:id`
+  The endpoint retrieves the user with the id you pass along in the usl.
 
-> Creating an entity:
+> Creating a user:
 
-- **POST** `/entities`
-  This creates an entity with the info you pass along the request body ( We'll get to this later ).
+- **POST** `/users`
+  This creates a user with the info you pass along in the request body.
 
-> Deleting an entity
+> Deleting a post
 
-- **DELETE** `/entities/:id`
-  This Deletes the entity with the id you pass along the URL
+- **DELETE** `/users/:id`
+  This Deletes the user with the id you pass along in the url
 
 ###### Bad
 
-> Getting an entity
+> Getting a post
 
-- **GET** `/get/entity?id=:id`
+- **GET** `/get/posts?id=:id`
+  This is wrong because you already established that it is a GET. Using /get on the endpoint name is redundant
 
-> Creating an entity
+> Creating a post
 
-- **POST** `/create/entity`
+- **POST** `/create/post`
+  Same as above, you already estabished that you're going to create something with the **POST** so, again, the create is redundant
 
-> Deleting an entity
+> Deleting a post
 
-- **DELETE** `/delete_entity/:id`
-
+- **POST** `/delete_post/:id`
+  In thi case not only you're being redundant by putting the verb delete on the endpoint name, but you're doing a wrong redundancy because it is actually a **POST** request and they're not for deleting objects
 ##### Reasoning
 
-Your resources should reflect what they do based on the HTTP Verb plus the resource name ( Noun ). So it make sense that doing a **GET** to `/entities` retrieves a list of entities. In exchange, doing a **GET** to `/get/entity` looks redundant and is not self descriptive.
+Your endpoind should reflect what they do based on the HTTP Verb plus the endpoing name (noun). So it make sense that doing a **GET** to `/entities` retrieves a list of entities. In exchange, doing a **GET** to `/get/entity` looks redundant and is not self descriptive. One more example: **POST** to `/update_entity/:id` that, semantically speaking, means you're Creating an `update_entity` object with the id on the url IS WRONG. This should be achived by **PUT** or **PATCH** `/entities/:id`
 
 ---
 
 #### Plural nouns or singular nouns?
 
-> If your resource contains a list or a group of entities insted of just one then it should be named with a plural noun. If it always contains on single entity then it should be named with a singular noun.
+> If your endpoint retrieves a list or a group of entities instead of just one then it should be named with a plural noun. If it always contains a single entity then it should be named with a singular noun.
 
 ##### Examples
 
 ###### Good
 
-> Getting comments from an entity
+> Getting comments from a post
 
-- **GET** `/entities/:id/comments`
-  This retrieve a list of comments for the entity with the Id you pass along the URL.
+- **GET** `/posts/:id/comments`
+  The endpoint retrieves a list of comments for the post with the id you pass along in the url.
 
-> Getting the likes count of an entity
+> Getting the likes count of a post
 
-- **GET** `/entities/:id/like_count`
-  This gets the likes count of  an entity with the Id you pass along the URL.
+- **GET** `/posts/:id/like_count`
+  The endpoint  the likes count of  a post with the id you pass along in the url.
 
-> Deleting all the comments from an entity
+> Deleting all the comments from a post
 
-- **DELETE** `/entities/:id/comments`
-  This Deletes all the comments fomr the entity with the id you pass along the URL
+- **DELETE** `/posts/:id/comments`
+  The endpoint deletes all the comments from the post with the id you pass along in the url
 
 ###### Bad
 
-> Getting an entity
+> Getting a post
 
-- **GET** `/entity/:id`
+- **GET** `/post/:id`
+  You're getting a post from a list/group of posts, so it should be plural `/posts/:id`
 
-> Creating an entity:
+> Creating a post
 
-- **POST** `/entities`
+- **PATCH** `/posts/`
+  You're trying to update a post but you're not passing the id on the url. Passing it along in the request body is wrong.
 
-> Deleting a comment from an entity
+> Deleting a comment from a post
 
-- **DELETE** `/entities/:id/comment/:id`
+- **DELETE** `/posts/:post_id/comment/:id`
+  Here you have a list/group of comments so it should be plural `/posts/:post_id/comments/:id`. I changed `comment` for `comments`
 
 ##### Reasoning
 
-Your resource should be clear about the fact that it is a single object or a group/list of objects
+Your endpoint name should be clear about the fact that it affects a single object or a group/list of objects. When you have singular resources, use singular nouns. When you have multiple resources affected by and endpoint, use plural nouns.
 
 ***
