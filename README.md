@@ -224,10 +224,11 @@ Using the right HTTP Verb on each endpoint will make clearer what the endpoint i
 > Deleting a post
 
 - **POST** `/delete_post/:id`
+
   In this case you're using **POST** (a verb that's intended to be used for creation) to delete an object. That's semantically wrong. You should use **DELETE** for that, instead. If you do so, you'll notice that you no longer need to add delete to your url and that then your url will clearly identify the object being deleted.
 ##### Reasoning
 
-Your endpoint should reflect what they do based on the HTTP Verb plus the endpoing name (noun). Therefore it makes sense that doing a **GET** to `/entities` retrieves a list of entities. On the contrary, doing a **GET** to `/get/entity` looks redundant and it's not self descriptive. 
+Your endpoints should reflect what they do based on the HTTP Verb plus the endpoint name (noun). Therefore it makes sense that doing a **GET** to `/entities` retrieves a list of entities. On the contrary, doing a **GET** to `/get/entity` looks redundant and it's not self descriptive. 
 Let's try with another example: **POST** `/update_entity/:id`. That, semantically speaking, should be interpreted as creating/adding an entity to the `update_entity` set. If your intention was to update the entity with id `:id`, you should've used **PUT** or **PATCH** `/entities/:id` instead.
 
 ---
@@ -280,7 +281,8 @@ Your endpoint name should be clear about the fact that it affects a single objec
 
 #### Query String VS. Request Body. Where to send the object?
 
-> Query Strings are only valid on **GET** requests and every parameter they include is or should be used as a filter on the data returned. The only scenario where a parameter goes in the path is to identify a resource. Every other paremeter (in **POST**, **PUT**, **PATCH**, etc) should go in the request body. Any parameter that doesn't match any of the previous rules should go in headers (authentication, API versioning, etc).
+> There are four places where you can add paremeters in your HTTP request: `query string`, `path`, `body` and `headers`. Query Strings are only valid on **GET** requests and every parameter they include is or should be used as a filter on the data returned. The only scenario where a parameter goes in the path is to identify a resource. Every other paremeter (in **POST**, **PUT**, **PATCH**, etc) should go in the request body. Any parameter that doesn't match any of the previous rules should go in headers (authentication, API versioning, etc).
+
 ##### Examples
 
 ###### Good
@@ -306,8 +308,8 @@ Your endpoint name should be clear about the fact that it affects a single objec
 > Creating a place
 
 - **POST** `/places?latitde=35.002&longitude=55.032&name=awesome%20place&type=restaurant`
-  Sending the parameters as a query string on a POST request is WRONG. They should be in the request body. Something like 
-```
+  Sending the parameters as a query string on a POST request is wrong. They should be in the request body. Something like 
+```js
 {
 	"latitude": 35.002
 	"longitude": 55.032
@@ -319,8 +321,8 @@ Your endpoint name should be clear about the fact that it affects a single objec
 > Updating a place
 
 - **PATCH** `/places?id=123&name=incredible%20place`
-  Don't send the parameters on the query string unless is a GET. You should be sending them in the request body like
-```
+  Don't send the parameters on the query string unless it is a GET. You should be sending them in the request body like
+```js
 {
 	"id": "123"
 	"name": "incredible place"
@@ -330,7 +332,7 @@ Your endpoint name should be clear about the fact that it affects a single objec
 > Geting places from Buenos Aires
 
 - **GET** `/places`
-```
+```js
 {
 	"city": "Buenos Aires"
 }
@@ -340,6 +342,5 @@ Your endpoint name should be clear about the fact that it affects a single objec
 ##### Reasoning
 
 Is a good semantic practice to use query strings only when you're using **GET** and use the request body to send all the data needed by the endpoint when using **POST**, **PUT**, **PATCH**, etc.
-
 
 ***
