@@ -188,7 +188,7 @@ Using the right HTTP Verb on each endpoint will make clearer what the endpoint i
 ---
 
 #### Use Nouns for endpoints names (URLs)
-> Your endpoints names should be always nouns, not verbs.
+> Your endpoint names should be always nouns, not verbs.
 
 ##### Examples
 
@@ -197,17 +197,17 @@ Using the right HTTP Verb on each endpoint will make clearer what the endpoint i
 > Getting a user
 
 - **GET** `/users/:id`
-  The endpoint retrieves the user with the id you pass along in the usl.
+  The endpoint retrieves the user with the id you pass along in the url.
 
-> Creating a user:
+> Creating a user
 
 - **POST** `/users`
   This creates a user with the info you pass along in the request body.
 
-> Deleting a post
+> Deleting a user
 
 - **DELETE** `/users/:id`
-  This Deletes the user with the id you pass along in the url
+  This deletes the user with the id you pass along in the url.
 
 ###### Bad
 
@@ -219,21 +219,22 @@ Using the right HTTP Verb on each endpoint will make clearer what the endpoint i
 > Creating a post
 
 - **POST** `/create/post`
-  Same as above, you already estabished that you're going to create something with the **POST** so, again, the create is redundant
+  Same as above, you already estabished that you're going to create something with the **POST** so, again, the create is redundant.
 
 > Deleting a post
 
 - **POST** `/delete_post/:id`
-  In thi case not only you're being redundant by putting the verb delete on the endpoint name, but you're doing a wrong redundancy because it is actually a **POST** request and they're not for deleting objects
+  In this case you're using **POST** (a verb that's intended to be used for creation) to delete an object. That's semantically wrong. You should use **DELETE** for that, instead. If you do so, you'll notice that you no longer need to add delete to your url and that then your url will clearly identify the object being deleted.
 ##### Reasoning
 
-Your endpoind should reflect what they do based on the HTTP Verb plus the endpoing name (noun). So it make sense that doing a **GET** to `/entities` retrieves a list of entities. In exchange, doing a **GET** to `/get/entity` looks redundant and is not self descriptive. One more example: **POST** to `/update_entity/:id` that, semantically speaking, means you're Creating an `update_entity` object with the id on the url IS WRONG. This should be achived by **PUT** or **PATCH** `/entities/:id`
+Your endpoint should reflect what they do based on the HTTP Verb plus the endpoing name (noun). Therefore make sense that doing a **GET** to `/entities` retrieves a list of entities. On the contrary, doing a **GET** to `/get/entity` looks redundant and it's not self descriptive. 
+Let's try with another example: **POST** `/update_entity/:id`. That, semantically speaking, should be interpreted as creating/adding an entity to the `update_entity` set. If your intention was to update the entity with id `:id`, you should've used **PUT** or **PATCH** `/entities/:id` instead.
 
 ---
 
 #### Plural nouns or singular nouns?
 
-> If your endpoint retrieves a list or a group of entities instead of just one then it should be named with a plural noun. If it always contains a single entity then it should be named with a singular noun.
+> If your endpoint manages a list or a group of entities instead of just one then it should be named with a plural noun. If it always manages a single entity then it should be named with a singular noun.
 
 ##### Examples
 
@@ -247,32 +248,98 @@ Your endpoind should reflect what they do based on the HTTP Verb plus the endpoi
 > Getting the likes count of a post
 
 - **GET** `/posts/:id/like_count`
-  The endpoint  the likes count of  a post with the id you pass along in the url.
+  The endpoint retrieves the likes count of a post with the id you pass along in the url.
 
 > Deleting all the comments from a post
 
 - **DELETE** `/posts/:id/comments`
-  The endpoint deletes all the comments from the post with the id you pass along in the url
+  The endpoint deletes all the comments from the post with the id you pass along in the url.
 
 ###### Bad
 
 > Getting a post
 
 - **GET** `/post/:id`
-  You're getting a post from a list/group of posts, so it should be plural `/posts/:id`
+  You're getting a post from a list/group of posts, so it should be plural `/posts/:id`.
 
-> Creating a post
+> Updating a post
 
-- **PATCH** `/posts/`
+- **PUT** `/posts`
   You're trying to update a post but you're not passing the id on the url. Passing it along in the request body is wrong.
 
 > Deleting a comment from a post
 
 - **DELETE** `/posts/:post_id/comment/:id`
-  Here you have a list/group of comments so it should be plural `/posts/:post_id/comments/:id`. I changed `comment` for `comments`
+  Here you have a list/group of comments so it should be plural `/posts/:post_id/comments/:id`. Notice how I changed `comment` for `comments`.
 
 ##### Reasoning
 
-Your endpoint name should be clear about the fact that it affects a single object or a group/list of objects. When you have singular resources, use singular nouns. When you have multiple resources affected by and endpoint, use plural nouns.
+Your endpoint name should be clear about the fact that it affects a single object or a group/list of objects. If you do a **POST** to `/posts` , you'll find the object you created by doing a **GET** to `/posts/:id`. 
+
+---
+
+#### Query String VS. Request Body. Where to send the object?
+
+> Query Strings are only valid on **GET** requests and every parameter they include are filter on the data returned. The only scenario where a parameter goes in the path is to identify a resource. Every other paremeter (in **POST**, **PUT**, **PATCH**, etc) should go in the request body. Any parameter that doesn't match any of the previous rules should go in headers (authentication, API versioning, etc).
+##### Examples
+
+###### Good
+
+> Getting posts for an specific user
+
+- **GET** `/posts?user_id=:id`
+  The endpoint retrieves a list of posts whos owner is the user with the id in the url
+
+> Rating a post
+
+- **PATCH** `/posts/:id`
+  `{"rate": 4.5}`
+  The endpoint gives the post a rating value. 
+
+> Geting places nearby the user
+
+- **GET** `/places?latitde=35.002&longitude=55.032`
+  The endpoint retrieves all the places nearby the user's location. Radius is a fixed value on the server.
+
+###### Bad
+
+> Creating a place
+
+- **POST** `/places?latitde=35.002&longitude=55.032&name=awesome%20place&type=restaurant`
+  Sending the parameters as a query string on a POST request is WRONG. They should be in the request body. Something like 
+```
+{
+	"latitude": 35.002
+	"longitude": 55.032
+	"name": "awesome place"
+	"type": "restaurant"
+}
+```
+
+> Updating a place
+
+- **PATCH** `/places?id=123&name=incredible%20place`
+  Don't send the parameters on the query string unless is a GET. You should be sending them in the request body like
+```
+{
+	"id": "123"
+	"name": "incredible place"
+}
+```
+
+> Geting places from Buenos Aires
+
+- **GET** `/places`
+```
+{
+	"city": "Buenos Aires"
+}
+```
+  Don't send the search parameters on the request body if you're using a **GET**. Your url should be `/places?city=Buenos%20Aires`
+
+##### Reasoning
+
+Is a good semantic practice to use query strings only when you're using **GET** and use the request body to send all the data needed by the endpoint when using **POST**, **PUT**, **PATCH**, etc.
+
 
 ***
