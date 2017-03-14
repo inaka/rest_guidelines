@@ -227,7 +227,7 @@ Using the right HTTP Verb on each endpoint will make clearer what the endpoint i
   In this case you're using **POST** (a verb that's intended to be used for creation) to delete an object. That's semantically wrong. You should use **DELETE** for that, instead. If you do so, you'll notice that you no longer need to add delete to your url and that then your url will clearly identify the object being deleted.
 ##### Reasoning
 
-Your endpoint should reflect what they do based on the HTTP Verb plus the endpoing name (noun). Therefore make sense that doing a **GET** to `/entities` retrieves a list of entities. On the contrary, doing a **GET** to `/get/entity` looks redundant and it's not self descriptive. 
+Your endpoint should reflect what they do based on the HTTP Verb plus the endpoing name (noun). Therefore it makes sense that doing a **GET** to `/entities` retrieves a list of entities. On the contrary, doing a **GET** to `/get/entity` looks redundant and it's not self descriptive. 
 Let's try with another example: **POST** `/update_entity/:id`. That, semantically speaking, should be interpreted as creating/adding an entity to the `update_entity` set. If your intention was to update the entity with id `:id`, you should've used **PUT** or **PATCH** `/entities/:id` instead.
 
 ---
@@ -280,7 +280,7 @@ Your endpoint name should be clear about the fact that it affects a single objec
 
 #### Query String VS. Request Body. Where to send the object?
 
-> Query Strings are only valid on **GET** requests and every parameter they include are filter on the data returned. The only scenario where a parameter goes in the path is to identify a resource. Every other paremeter (in **POST**, **PUT**, **PATCH**, etc) should go in the request body. Any parameter that doesn't match any of the previous rules should go in headers (authentication, API versioning, etc).
+> Query Strings are only valid on **GET** requests and every parameter they include is or should be used as a filter on the data returned. The only scenario where a parameter goes in the path is to identify a resource. Every other paremeter (in **POST**, **PUT**, **PATCH**, etc) should go in the request body. Any parameter that doesn't match any of the previous rules should go in headers (authentication, API versioning, etc).
 ##### Examples
 
 ###### Good
@@ -288,7 +288,7 @@ Your endpoint name should be clear about the fact that it affects a single objec
 > Getting posts for an specific user
 
 - **GET** `/posts?user_id=:id`
-  The endpoint retrieves a list of posts whos owner is the user with the id in the url
+  The endpoint retrieves a list of posts whose owner is the user with the id in the url
 
 > Rating a post
 
