@@ -1,8 +1,7 @@
 # REST API Design Guidelines
 
 ## Introduction
-What you will find in this repository is a list of guidelines we follow at [Inaka](http://inaka.net) when designing our REST APIs.
-These guidelines are not taxative, some exceptions can be found here or there, but we do base our tools (like [Jayme](http://github.com/inaka/Jayme), [Dayron](http://github.com/inaka/Dayron) and [SumoREST](http://github.com/inaka/sumo_rest)) on them. That's why, if you're going to use one of those tools, it would be much simpler to have a server that complies to the following guides.
+Here, you will find the guidelines that we follow at [Inaka](http://inaka.net) when designing our REST APIs. These guidelines are not taxative, some exceptions can be found here or there, but we do base our tools (like [Jayme](http://github.com/inaka/Jayme), [Dayron](http://github.com/inaka/Dayron) and [SumoREST](http://github.com/inaka/sumo_rest)) on them. That's why, if you're going to use one of those tools, it would be much simpler to have a server that complies to the following guides.
 
 ## Contact Us
 
@@ -45,21 +44,22 @@ It's better to maintain a system that just looks ugly to you than to have a syst
 
 ------
 
-#### 
+#### Use snake_case in URLs and JSON keys
 
-#### Use snake_case with JSON
-
-> When the endpoint returns or receive a JSON, the keys should always be in snake_case.
+> Use *snake_case* for separating words when naming URLs and JSON keys.
 
 
 ##### Examples
 ###### Good
+
+**GET** `/feed_items/123`
+
 ```
 {
 	"caption": "string",
 	"comment_count": 0,
 	"created_at": "2017-03-07T18:57:44.622Z",
-	"id": "string",
+	"id": "123",
 	"like_count": 0,
 	"media_type": "image",
 	"owner": "string"
@@ -68,12 +68,14 @@ It's better to maintain a system that just looks ugly to you than to have a syst
 
 ###### Bad
 
+**GET** `/feedItems/123`
+
 ```
 {
 	"caption": "string",
 	"commentCount": 0,
 	"createdAt": "2017-03-07T18:57:44.622Z",
-	"id": "string",
+	"id": "123",
 	"likeCount": 0,
 	"mediaType": "image",
 	"owner": "string"  
@@ -81,13 +83,12 @@ It's better to maintain a system that just looks ugly to you than to have a syst
 ```
 
 ##### Reasoning
-Even though in some programming languages is common to name variables or object instances with camelCase names, we consider the snake_case is the most readable and understandable way to name the key fields on a JSON object.
+Studies have found that *snake_case* is 20% easier to read than camelCase. Also, although JavaScript convention is *camelCase*, most of popular JSON APIs use *snake_case*.
 
 ---
 
 #### Don't use response envelopes by default
-> When the endpoint returns, for example, an array, it should be returned as a plain array, not a dictionary with the array as a value.
-
+> When an endpoint needs to return several entities in one response, place those entities in a plain array at the root level of the JSON object. Don't wrap that array within another object in the JSON.
 
 ##### Examples
 ###### Good
@@ -141,49 +142,43 @@ Even though in some programming languages is common to name variables or object 
 ```
 
 ##### Reasoning
-If you're calling a **GET** on `/entities` , you're asking for a list of entities, not an object with the entities inside one of its properties. So don't envelope things that should be retrieved directly.
+Having an array with the results at the root level is simpler than anything else. Using an envelope, on the other hand, adds complexity to the response, and the possibility of introducing more information to it, that may not be related to the resources themselves, such as pagination information, which should be somewhere else.
 
 ---
 
-#### Use all HTTP verbs (Not everything is a GET)
-> Use all the HTTP verbs. If you have to Create something use POST. If you want to Read something use GET. If you want to Update something use PATCH or PUT. If you want to Delete something use DELETE. Always remember C.R.U.D. (Create, Read, Update, Delete) when setting the verb for your endpoint.
+#### Use proper HTTP verbs
 
+> Any endpoint must use an HTTP verb that reflects what the endpoint is meant to do. Typically, these are the scenarios:
+> * Use the `POST` verb for endpoints that create entities.
+> * Use the `GET` verb for endpoints that return entities.
+> * Use the `PUT` verb for endpoints that fully update entities.
+> * Use the `PATCH` verb for endpoints that partially update entities.
+> * Use the `DELETE` verb for endpoints that delete entities.
 
 ##### Examples
 ###### Good
 
->Creating a comment on a media item: 
+- **POST** `/media/:media_id/comments` *Creates a comment related to the media with id :media_id.*
 
-- **POST** `/media/:media_id/comments`
-   This Creates a comment related to the media id you pass along in the URL.
-> Reading comments on a media item:
+- **GET** `/media/:media_id/comments` *Reads all the comments related to the media with id :media_id.*
 
-- **GET** `/media/:media_id/comments`
-   This Reads all the comments related to the media id you pass along in the URL.
-> Updating ( editing ) the comment content on a media item:
+- **PUT** `/media/:media_id/comments/:comment_id` *Updates all the fields of the comment with id :comment_id.*
 
-- **PUT**  `/media/:media_id/comments/:id`
-   This Updates all the fields of the comment with the id you pass along in the URL
-> Deleting a comment on a media item:
+- **PATCH** `/media/:media_id/comments/:comment_id` *Updates specific fields of the comment with id :comment_id.*
 
-- **DELETE** `/media/:media_id/comments/:id`
-   This Deletes the comment with the id you pass along in the URL
+- **DELETE** `/media/:media_id/comments/:comment_id` *Deletes the comment with id :comment_id.*
 
 ###### Bad
-> Creating a comment on a media item: 
 
 - **GET** `/media/:media_id/create_comment?text=comment%20text`
 
-> Updating the comment content on a media item:
-
 - **GET**  `/media/:media_id/update_comment?text=comment%20new%20text`
-> Deleting a comment on a media item:
 
 - **GET** `/media/:media_id/delete_comment?id=:id`
 
 
 ##### Reasoning
-Using the right HTTP Verb on each endpoint will make clearer what the endpoint is made for and what we should expect it to do, receive and return. 
+Taking advantage of the HTTP verbs by using them properly leads to clear APIs that can be known and understood by the server and the clients with no ambiguity.
 
 ---
 
