@@ -6,9 +6,6 @@ These guidelines are not taxative, some exceptions can be found here or there, b
 
 ## Contact Us
 
-For **questions** or **general comments** regarding the use of this repository, please use our public
-[hipchat room](http://inaka.net/hipchat).
-
 And you can check all of our open-source projects at [inaka.github.io](http://inaka.github.io)
 
 
